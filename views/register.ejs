@@ -58,6 +58,7 @@
             }).then(response => response.json()).then(data=>{
                 log('success', data)
                 form.reset()
+                location.assign('/login')
             }).catch(error => {
                 log('Error', error)
             })
