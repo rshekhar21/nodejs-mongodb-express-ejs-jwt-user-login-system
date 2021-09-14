@@ -1,0 +1,68 @@
+<%- include('./partials/head') %>
+    <div class="container mt-5">        
+        <div class="row">
+            <div class="col-7">1</div>
+            <div class="col-5">
+                <div class="h1 mb-5">Register</div>
+                <form id="register">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="verifypwd" class="form-label">Vefify Passwrod</label>
+                        <input type="password" class="form-control" id="verifypwd">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <a href="/login" class="ms-5 link-primary">Login</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const log = console.log;
+        const form = document.getElementById('register');
+        form.addEventListener('submit', registerUser)
+
+        function emailValidation(email){
+            var reg = /^([A-Za-z0-9._-])+\@([A-Za-z0-9._-])+\.([A-Za-z]{2,4})$/;
+            return reg.test(email);
+        }
+
+        function registerUser(e){
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const verifypwd = document.getElementById('verifypwd').value;
+
+            if(!emailValidation(email)){
+                alert("Invalid Email Address");
+                return false
+            }
+
+            const formData = {email, password};
+            fetch('/api/create',{
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData)
+            }).then(response => response.json()).then(data=>{
+                log('success', data)
+                form.reset()
+            }).catch(error => {
+                log('Error', error)
+            })
+        }
+    </script>
+
+
+<%- include('./partials/foot')%>

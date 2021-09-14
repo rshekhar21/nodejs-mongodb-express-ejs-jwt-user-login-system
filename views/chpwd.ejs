@@ -1,0 +1,64 @@
+<%- include('./partials/head') %>
+    <div class="container mt-5">        
+        <div class="row">
+            <div class="col-7">1</div>
+            <div class="col-5">
+                <div class="h1 mb-5">Change Passwrod</div>
+                <form id='login'>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" disabled=true value=<%=user%>>
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cnfpwd" class="form-label">Vefify Password</label>
+                        <input type="password" class="form-control" id="cnfpwd">
+                    </div>
+
+                    <!-- <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
+                    </div> -->
+                    <button type="submit" class="btn btn-primary mt-4">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const log = console.log;
+        const form = document.getElementById('login')
+        form.addEventListener('submit', userLogin)
+        function userLogin(e){
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confpswd = document.getElementById('cnfpwd').value;
+            if (password !== confpswd) {
+              alert('Password Must Match')
+              return false;
+            }
+            const formData = {password, confpswd}
+
+            fetch('/api/chpwd', { 
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData)
+            }).then((resp)=>resp.json()).then(data => {
+                // log(data)
+                // log(data.code)
+                if (data.code ===1) return alert(data.error)
+                if (data.code ===2) return alert(data.error)
+                if (data.code ===3) return alert(data.error)
+                // alert('passwrod changed successfully')
+                // location.assign('/')
+            }).catch((err) => {
+                log(err)
+            })
+        }
+    </script>
+<%- include('./partials/foot')%>
